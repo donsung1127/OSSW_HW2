@@ -1,4 +1,5 @@
 import logging
+import os
 from transformers import pipeline
 from app.models.schemas import TextAnalysisResponse, LabelScore
 from app.core.config import settings
@@ -8,16 +9,23 @@ logger = logging.getLogger(__name__)
 class InferenceService:
     def __init__(self):
         try:
+            hf_home = os.getenv("HF_HOME", "default")
+            logger.info(f"[{settings.PROJECT_NAME}] HF_HOME: {hf_home}")
             logger.info(f"[{settings.PROJECT_NAME}] Loading ML Model: {settings.MODEL_NAME_OR_PATH}...")
+            
             # 한국어 혐오 표현/스팸 분류로 많이 쓰이는 smilegate-ai/kor_unsmile 활용
+            # local_files_only=True를 사용하고 싶으나, 도커 빌드 시점에 다운로드된 것을 활용하도록 설정 지향
             self.classifier = pipeline(
                 "text-classification", 
                 model=settings.MODEL_NAME_OR_PATH,
                 top_k=None
             )
-            print("ML Model loaded successfully.")
+            logger.info("ML Model loaded successfully.")
         except Exception as e:
-            print(f"Failed to load model: {e}")
+            logger.error(f"Failed to load model: {str(e)}")
+            # 상세 에러 추적을 위해 로깅 강화
+            import traceback
+            logger.error(traceback.format_exc())
             self.classifier = None
 
     async def analyze_text(self, text: str, post_id: str) -> TextAnalysisResponse:
