@@ -50,3 +50,18 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/monitor-api:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/monitor-api:buildcache,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: self-hosted
+    
+    steps:
+      - name: Pull Latest Docker Image
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/monitor-api:latest
+        
+      - name: Stop and Remove Existing Container
+        run: docker rm -f monitor-api
+        continue-on-error: true
+        
+      - name: Run New Container
+        run: docker run -d --name monitor-api -p 8000:8000 --restart always ${{ secrets.DOCKERHUB_USERNAME }}/monitor-api:latest
