@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# ML Dependencies (실제 모델 연동)
+torch
+transformers
+scikit-learn
+
+# Web Scraping
+httpx
+beautifulsoup4
