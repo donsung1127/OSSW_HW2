@@ -12,6 +12,7 @@ class LabelScore(BaseModel):
 
 class TextAnalysisResponse(BaseModel):
     post_id: str
+    content: Optional[str] = None
     is_safe: bool = Field(..., description="승인 가능(안전한 글) 여부")
     action_required: Optional[str] = Field(None, description="필요한 조치 (예: block, flag, none)")
     details: List[LabelScore]

@@ -55,6 +55,7 @@ class InferenceService:
 
         return TextAnalysisResponse(
             post_id=post_id,
+            content=text,
             is_safe=is_safe,
             action_required=action,
             details=scores

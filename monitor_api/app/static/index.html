@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Monitor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h1>Monitor AI</h1>
+            </div>
+            <nav>
+                <button class="nav-item active" data-tab="lab">
+                    <span class="icon">🧪</span> Analysis Lab
+                </button>
+                <button class="nav-item" data-tab="monitor">
+                    <span class="icon">📡</span> Live Monitor
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="dot"></span> API Connected
+                </div>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header>
+                <h2 id="view-title">Analysis Lab</h2>
+                <div class="user-profile">
+                    <span class="badge">admin</span>
+                </div>
+            </header>
+
+            <!-- Analysis Lab Section -->
+            <section id="lab-section" class="tab-content active">
+                <div class="input-card card">
+                    <h3>Single Content Analysis</h3>
+                    <p class="subtitle">Enter text to perform instant AI safety evaluation.</p>
+                    <div class="form-group">
+                        <label for="post-id-input">Post ID</label>
+                        <input type="text" id="post-id-input" placeholder="e.g. post_123" value="test_post">
+                    </div>
+                    <div class="form-group">
+                        <label for="content-input">Content</label>
+                        <textarea id="content-input" rows="5" placeholder="Type or paste content here..."></textarea>
+                    </div>
+                    <button id="analyze-btn" class="primary-btn">Analyze Content</button>
+                </div>
+
+                <div id="single-result" class="result-container" style="display: none;">
+                    <div class="card result-card">
+                        <div class="result-header">
+                            <h3>Analysis Result</h3>
+                            <div id="safety-badge" class="badge large">SAFE</div>
+                        </div>
+                        <div class="result-body">
+                            <div class="scores-grid" id="scores-grid">
+                                <!-- Scores will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monitor Section -->
+            <section id="monitor-section" class="tab-content">
+                <div class="input-card card">
+                    <h3>Gallery Monitor</h3>
+                    <p class="subtitle">Monitor real-time posts from DCInside galleries.</p>
+                    <div class="search-box">
+                        <input type="text" id="gallery-input" placeholder="Gallery ID (e.g. programming)">
+                        <button id="monitor-btn" class="primary-btn">Start Monitoring</button>
+                    </div>
+                </div>
+
+                <div id="monitor-results" class="monitor-grid">
+                    <!-- Gallery results will be injected here -->
+                    <div class="empty-state">
+                        <p>Enter a gallery ID to start monitoring real-time posts.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="loader" class="loader-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Analyzing in Real-time...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
