@@ -1,4 +1,4 @@
-# CI / CD Pipeline - Final re-trigger after runner restart
+# CI / CD Pipeline - Re-triggered after fixing ExecutionPolicy
 name: CI / CD Pipeline
 
 env:
