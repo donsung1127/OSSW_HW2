@@ -34,17 +34,45 @@ async def analyze_dcinside_gallery(
         if not posts:
             raise HTTPException(status_code=404, detail="게시물을 찾을 수 없습니다. (갤러리 ID 오류 또는 접근 차단)")
 
-        # 2. AI 추론 작업 병렬 실행
-        tasks = [
-            inference_service.analyze_text(text=post["content"], post_id=post["post_id"])
-            for post in posts
-        ]
-        results = await asyncio.gather(*tasks)
+        # 2. 블랙리스트 필터링 및 AI 추론 작업 준비
+        from app.core.config import settings
+        
+        results = []
+        inference_tasks = []
+        
+        for post in posts:
+            author = post.get("author", "익명")
+            if author in settings.BLACKLIST_NICKNAMES:
+                # 블랙리스트에 포함된 경우 AI 모델 없이 즉시 차단 판정
+                results.append(TextAnalysisResponse(
+                    post_id=post["post_id"],
+                    content=post["content"],
+                    author=author,
+                    is_safe=False,
+                    action_required="block",
+                    details=[LabelScore(label="blacklist", score=1.0)]
+                ))
+            else:
+                # 일반 유저는 AI 추론 예약
+                inference_tasks.append(
+                    (author, inference_service.analyze_text(text=post["content"], post_id=post["post_id"]))
+                )
+
+        if inference_tasks:
+            # AI 추론 작업 병렬 실행
+            authors = [t[0] for t in inference_tasks]
+            tasks = [t[1] for t in inference_tasks]
+            inference_results = await asyncio.gather(*tasks)
+            
+            # 작성자 정보 매칭하여 최종 결과에 추가
+            for author, res in zip(authors, inference_results):
+                res.author = author
+                results.append(res)
 
         return BulkAnalysisResponse(
             gallery_id=gallery_id,
             analyzed_count=len(results),
-            results=list(results)
+            results=results
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Scraping/Inference error: {str(e)}")

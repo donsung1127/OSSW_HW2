@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     # 모델 추론 임계값 (예: 스팸 판별 기준치)
     SPAM_THRESHOLD: float = 0.8
     TOXIC_THRESHOLD: float = 0.75
+    
+    # 블랙리스트 설정 (닉네임 기반)
+    BLACKLIST_NICKNAMES: list[str] = ["사용자1", "광고도배", "troll_user"]
 
     class Config:
         env_file = ".env"

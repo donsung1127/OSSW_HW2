@@ -34,7 +34,12 @@ def create_app() -> FastAPI:
     @app.get("/health")
     def health_check():
         """로드밸런서(L4/L7) 및 쿠버네티스의 Readiness/Liveness Probe를 위한 엔드포인트"""
-        return {"status": "ok", "model_loaded": True}
+        return {
+            "status": "ok", 
+            "model_loaded": True, 
+            "version": "1.0.1",
+            "description": "Blacklist feature added"
+        }
 
     return app
 

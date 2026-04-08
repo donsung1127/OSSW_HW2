@@ -35,16 +35,22 @@ class DCInsideScraper:
                 
             post_id_elem = post.select_one("td.gall_num")
             title_elem = post.select_one("td.gall_tit a")
+            writer_elem = post.select_one("td.gall_writer")
             
             # 공지사항(설자리) 제외
             if post_id_elem and title_elem and post_id_elem.text.strip().isdigit():
                 post_id = post_id_elem.text.strip()
                 title = title_elem.text.strip()
-                # 댓글수 같은 불필요한 텍스트 제거 기능이 필요한 경우 여기서 전처리 가능
+                
+                # 작성자 닉네임 추출 (data-nick 속성 우선, 없으면 텍스트)
+                author = "익명"
+                if writer_elem:
+                    author = writer_elem.get("data-nick") or writer_elem.get_text().strip()
                 
                 result.append({
                     "post_id": f"dc_{gallery_id}_{post_id}",
-                    "content": title
+                    "content": title,
+                    "author": author
                 })
                 
         return result

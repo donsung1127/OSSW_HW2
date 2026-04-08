@@ -145,9 +145,12 @@ function displayGalleryResults(results) {
                 <span class="post-id">${res.post_id}</span>
                 <span class="badge ${res.is_safe ? 'safe' : 'danger'}">${res.is_safe ? 'SAFE' : 'FLAGGED'}</span>
             </div>
+            <div class="post-meta" style="font-size: 0.8125rem; color: var(--primary-hover); margin-bottom: 0.5rem; font-weight: 600;">
+                👤 ${res.author || 'Anonymous'}
+            </div>
             <p class="post-content">${res.content || 'No content found.'}</p>
             <div class="score-label-pill" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                Main Category: <strong>${topLabel.label}</strong> (${(topLabel.score * 100).toFixed(0)}%)
+                Reason: <strong>${topLabel.label}</strong> (${(topLabel.score * 100).toFixed(0)}%)
             </div>
         `;
 
