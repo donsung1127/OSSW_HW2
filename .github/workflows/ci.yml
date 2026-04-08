@@ -1,4 +1,4 @@
-# CI / CD Pipeline - Re-triggered after reboot
+# CI / CD Pipeline - Final re-trigger after runner restart
 name: CI / CD Pipeline
 
 env:
